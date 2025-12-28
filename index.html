@@ -3,193 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Madu's Financial Plan v2</title>
+    <title>Madu's Wealth Allocator</title>
     <style>
         :root {
-            --primary: #0056b3;
-            --bg: #f0f2f5;
+            --primary-color: #0056b3; /* HNB Blue-ish tone */
+            --bg-color: #f4f7f6;
             --card-bg: #ffffff;
-            --text: #1a1a1a;
-            --danger: #d93025;
-            --success: #188038;
+            --text-main: #333;
+            --text-secondary: #666;
+            --accent-green: #28a745;
+            --accent-purple: #6f42c1;
+            --accent-orange: #fd7e14;
+            --accent-teal: #20c997;
+            --accent-red: #dc3545;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
             padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        h2 { text-align: center; margin-bottom: 20px; color: #333; }
-
-        .controls {
+        .container {
             background: var(--card-bg);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
 
-        .input-group { margin-bottom: 15px; }
-        .input-group:last-child { margin-bottom: 0; }
-        
-        label { display: block; font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600;}
-        
-        input {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-main);
         }
-        input:focus { border-color: var(--primary); outline: none; }
+
+        .input-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .currency-wrapper {
+            position: relative;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px 15px 15px 45px; /* Space for LKR */
+            font-size: 18px;
+            border: 2px solid #e1e4e8;
+            border-radius: 12px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+            outline: none;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* Allocation Cards */
+        .allocation-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
 
         .card {
-            background: var(--card-bg);
-            padding: 15px;
+            background: #fff;
+            border: 1px solid #eee;
             border-radius: 12px;
-            margin-bottom: 12px;
-            border-left: 5px solid #ccc;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: transform 0.2s;
         }
 
-        .card-info h4 { margin: 0 0 5px 0; font-size: 16px; }
-        .card-info p { margin: 0; font-size: 12px; color: #666; }
-        .card-amount { font-weight: 700; font-size: 18px; }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-color: transparent;
+        }
 
-        /* Colors matching your banks */
-        .hnb { border-color: #0056b3; } /* Main */
-        .peoples { border-color: #f7a600; } /* Fun - People's Bank Yellow */
-        .nsb { border-color: #ffc107; } /* Emergency - NSB Yellow */
-        .frimi { border-color: #fd3c4f; } /* Invest - FriMi Red */
-        .goal { border-color: #00a884; } /* Goal - Green */
+        .card-label {
+            display: flex;
+            flex-direction: column;
+        }
 
-        .bill-breakdown {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px dashed #eee;
+        .card-title {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .card-percent {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 10px;
+            width: fit-content;
+        }
+
+        .amount {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        /* Specific Colors for Categories */
+        .needs .amount { color: var(--primary-color); }
+        .fun .amount { color: var(--accent-orange); }
+        .emergency .amount { color: var(--accent-red); }
+        .goal .amount { color: var(--accent-teal); }
+        .invest .amount { color: var(--accent-purple); }
+
+        .needs { border-left: 5px solid var(--primary-color); }
+        .fun { border-left: 5px solid var(--accent-orange); }
+        .emergency { border-left: 5px solid var(--accent-red); }
+        .goal { border-left: 5px solid var(--accent-teal); }
+        .invest { border-left: 5px solid var(--accent-purple); }
+
+        .total-display {
+            text-align: center;
+            margin-top: 30px;
             font-size: 13px;
-            color: #555;
+            color: #aaa;
         }
-        .bill-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
-        .rem-row { font-weight: 700; color: var(--primary); }
-        .danger-text { color: var(--danger); }
 
     </style>
 </head>
 <body>
 
-    <h2>💰 Galgamuwa Wealth Plan</h2>
+<div class="container">
+    <h1>💸 Income Allocator</h1>
 
-    <div class="controls">
-        <div class="input-group">
-            <label>Income (LKR)</label>
-            <input type="number" id="income" placeholder="44000" oninput="calc()">
-        </div>
-        <div class="input-group">
-            <label>Monthly Personal Bills (LKR)</label>
-            <input type="number" id="bills" value="13900" oninput="calc()"> 
-            <small style="color:#888; display:block; margin-top:4px;">(Router, Phone, Adobe, Upwork)</small>
+    <div class="input-group">
+        <label for="income">Enter Income Amount (LKR)</label>
+        <div class="currency-wrapper">
+            <span class="currency-symbol">Rs.</span>
+            <input type="number" id="income" placeholder="44,000" oninput="calculateSplit()">
         </div>
     </div>
 
-    <div class="card hnb" style="display:block;">
-        <div style="display:flex; justify-content:space-between;">
-            <div class="card-info">
-                <h4>Main (HNB)</h4>
-                <p>55% Needs Allocation</p>
+    <div class="allocation-grid">
+        <div class="card needs">
+            <div class="card-label">
+                <span class="card-title">Main (HNB)</span>
+                <span class="card-percent">55% - Needs</span>
             </div>
-            <div class="card-amount" id="amt-needs">0.00</div>
+            <span class="amount" id="val-needs">0.00</span>
         </div>
-        <div class="bill-breakdown">
-            <div class="bill-row">
-                <span>- Bills Payment:</span>
-                <span id="disp-bills">0.00</span>
+
+        <div class="card invest">
+            <div class="card-label">
+                <span class="card-title">Investment</span>
+                <span class="card-percent">15% - Future</span>
             </div>
-            <div class="bill-row rem-row">
-                <span>Remaining for Food/Travel:</span>
-                <span id="disp-remaining">0.00</span>
+            <span class="amount" id="val-invest">0.00</span>
+        </div>
+
+        <div class="card fun">
+            <div class="card-label">
+                <span class="card-title">Fun</span>
+                <span class="card-percent">10% - Enjoy</span>
             </div>
+            <span class="amount" id="val-fun">0.00</span>
+        </div>
+
+        <div class="card emergency">
+            <div class="card-label">
+                <span class="card-title">Emergency</span>
+                <span class="card-percent">10% - Safety</span>
+            </div>
+            <span class="amount" id="val-emergency">0.00</span>
+        </div>
+
+        <div class="card goal">
+            <div class="card-label">
+                <span class="card-title">Goal (Bike/Home)</span>
+                <span class="card-percent">10% - Dream</span>
+            </div>
+            <span class="amount" id="val-goal">0.00</span>
         </div>
     </div>
 
-    <div class="card peoples">
-        <div class="card-info">
-            <h4>Fun (People's Bank)</h4>
-            <p>10% - Card Only</p>
-        </div>
-        <div class="card-amount" id="amt-fun">0.00</div>
+    <div class="total-display">
+        Plan: 55 / 15 / 10 / 10 / 10 Split
     </div>
+</div>
 
-    <div class="card nsb">
-        <div class="card-info">
-            <h4>Emergency (NSB)</h4>
-            <p>10% - Passbook</p>
-        </div>
-        <div class="card-amount" id="amt-emg">0.00</div>
-    </div>
+<script>
+    function formatCurrency(amount) {
+        return amount.toLocaleString('en-LK', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
 
-    <div class="card goal">
-        <div class="card-info">
-            <h4>Goal (HNB FD)</h4>
-            <p>10% - Bike/Home</p>
-        </div>
-        <div class="card-amount" id="amt-goal">0.00</div>
-    </div>
+    function calculateSplit() {
+        const input = document.getElementById('income').value;
+        const total = parseFloat(input);
 
-    <div class="card frimi">
-        <div class="card-info">
-            <h4>Investment (FriMi)</h4>
-            <p>15% - Crypto/Stocks</p>
-        </div>
-        <div class="card-amount" id="amt-inv">0.00</div>
-    </div>
-
-    <script>
-        function fmt(num) {
-            return num.toLocaleString('en-LK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        if (isNaN(total) || total === 0) {
+            document.getElementById('val-needs').textContent = "0.00";
+            document.getElementById('val-fun').textContent = "0.00";
+            document.getElementById('val-emergency').textContent = "0.00";
+            document.getElementById('val-goal').textContent = "0.00";
+            document.getElementById('val-invest').textContent = "0.00";
+            return;
         }
 
-        function calc() {
-            let income = parseFloat(document.getElementById('income').value) || 0;
-            let bills = parseFloat(document.getElementById('bills').value) || 0;
+        // Calculations
+        const needs = total * 0.55;
+        const fun = total * 0.10;
+        const emergency = total * 0.10;
+        const goal = total * 0.10;
+        const invest = total * 0.15;
 
-            // Percentages
-            let p_needs = income * 0.55;
-            let p_fun = income * 0.10;
-            let p_emg = income * 0.10;
-            let p_goal = income * 0.10;
-            let p_inv = income * 0.15;
+        // Update DOM
+        document.getElementById('val-needs').textContent = formatCurrency(needs);
+        document.getElementById('val-fun').textContent = formatCurrency(fun);
+        document.getElementById('val-emergency').textContent = formatCurrency(emergency);
+        document.getElementById('val-goal').textContent = formatCurrency(goal);
+        document.getElementById('val-invest').textContent = formatCurrency(invest);
+    }
+</script>
 
-            // Needs Calculation
-            let remaining = p_needs - bills;
-
-            // Update DOM
-            document.getElementById('amt-needs').innerText = fmt(p_needs);
-            document.getElementById('disp-bills').innerText = fmt(bills);
-            
-            let remEl = document.getElementById('disp-remaining');
-            remEl.innerText = fmt(remaining);
-            
-            if(remaining < 0) {
-                remEl.innerText = "Warning: " + fmt(remaining);
-                remEl.className = "bill-row rem-row danger-text";
-            } else {
-                remEl.className = "bill-row rem-row";
-            }
-
-            document.getElementById('amt-fun').innerText = fmt(p_fun);
-            document.getElementById('amt-emg').innerText = fmt(p_emg);
-            document.getElementById('amt-goal').innerText = fmt(p_goal);
-            document.getElementById('amt-inv').innerText = fmt(p_inv);
-        }
-    </script>
 </body>
 </html>
