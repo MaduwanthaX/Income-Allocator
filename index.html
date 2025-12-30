@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Income Allocator</title>
 
-<!-- Inter Font -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,7 +33,6 @@ body {
   color: var(--text);
 }
 
-/* Wider container */
 .container {
   width: 100%;
   max-width: 620px;
@@ -44,9 +42,7 @@ body {
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid var(--border);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.05),
-    0 30px 80px rgba(0,0,0,0.6);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
 }
 
 h1 {
@@ -54,7 +50,6 @@ h1 {
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 36px;
-  letter-spacing: -0.02em;
 }
 
 label {
@@ -65,9 +60,7 @@ label {
   display: block;
 }
 
-.input-group {
-  margin-bottom: 22px;
-}
+.input-group { margin-bottom: 22px; }
 
 input, select {
   width: 100%;
@@ -79,10 +72,6 @@ input, select {
   background: rgba(255,255,255,0.06);
   color: var(--text);
   outline: none;
-}
-
-input:focus, select:focus {
-  border-color: var(--primary);
 }
 
 .currency {
@@ -103,9 +92,7 @@ input:focus, select:focus {
   font-size: 16px;
 }
 
-.cards {
-  margin-top: 10px;
-}
+.cards { margin-top: 10px; }
 
 .card {
   display: flex;
@@ -116,7 +103,6 @@ input:focus, select:focus {
   border-radius: 18px;
   background: rgba(255,255,255,0.04);
   border-left: 5px solid;
-  backdrop-filter: blur(10px);
 }
 
 .card span:first-child {
@@ -128,7 +114,6 @@ input:focus, select:focus {
   font-weight: 700;
 }
 
-/* Accent colors */
 .needs { border-color: #3b82f6; }
 .invest { border-color: #a855f7; }
 .fun { border-color: #f97316; }
@@ -153,11 +138,6 @@ button {
   cursor: pointer;
   background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
-  box-shadow: 0 10px 30px rgba(59,130,246,0.35);
-}
-
-button:hover {
-  transform: translateY(-1px);
 }
 </style>
 </head>
@@ -190,11 +170,30 @@ button:hover {
 </div>
 
 <div class="cards">
-  <div class="card needs"><span>Main (HNB)</span><span class="amount" id="needs">0.00</span></div>
-  <div class="card invest"><span>Investment</span><span class="amount" id="invest">0.00</span></div>
-  <div class="card fun"><span>Fun</span><span class="amount" id="fun">0.00</span></div>
-  <div class="card emergency"><span>Emergency</span><span class="amount" id="emergency">0.00</span></div>
-  <div class="card goal"><span>Goal</span><span class="amount" id="goal">0.00</span></div>
+  <div class="card needs">
+    <span>Main (HNB)</span>
+    <span class="amount" id="needs">0.00</span>
+  </div>
+
+  <div class="card invest">
+    <span>Investment (FRIMI)</span>
+    <span class="amount" id="invest">0.00</span>
+  </div>
+
+  <div class="card fun">
+    <span>Fun (People’s Bank)</span>
+    <span class="amount" id="fun">0.00</span>
+  </div>
+
+  <div class="card emergency">
+    <span>Emergency (NSB)</span>
+    <span class="amount" id="emergency">0.00</span>
+  </div>
+
+  <div class="card goal">
+    <span>Goal (HNB 2ND)</span>
+    <span class="amount" id="goal">0.00</span>
+  </div>
 </div>
 
 <div class="split">55 / 15 / 10 / 10 / 10 split</div>
@@ -230,11 +229,11 @@ function savePDF() {
   pdf.text(`Source: ${source.value}`, 20, 43);
   pdf.text(`Income: Rs. ${income.value}`, 20, 51);
 
-  pdf.text(`Needs: ${needs.innerText}`, 20, 65);
-  pdf.text(`Investment: ${invest.innerText}`, 20, 73);
-  pdf.text(`Fun: ${fun.innerText}`, 20, 81);
-  pdf.text(`Emergency: ${emergency.innerText}`, 20, 89);
-  pdf.text(`Goal: ${goal.innerText}`, 20, 97);
+  pdf.text(`Main (HNB): ${needs.innerText}`, 20, 65);
+  pdf.text(`Investment (FRIMI): ${invest.innerText}`, 20, 73);
+  pdf.text(`Fun (People’s Bank): ${fun.innerText}`, 20, 81);
+  pdf.text(`Emergency (NSB): ${emergency.innerText}`, 20, 89);
+  pdf.text(`Goal (HNB 2ND): ${goal.innerText}`, 20, 97);
 
   pdf.save(`income-${date.value}.pdf`);
 }
