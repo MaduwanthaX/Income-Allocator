@@ -1,261 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Madu's Wealth Allocator</title>
-    <style>
-        :root {
-            --primary-color: #0056b3; /* HNB Blue-ish tone */
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-main: #333;
-            --text-secondary: #666;
-            --accent-green: #28a745;
-            --accent-purple: #6f42c1;
-            --accent-orange: #fd7e14;
-            --accent-teal: #20c997;
-            --accent-red: #dc3545;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Income Allocator</title>
 
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+<!-- Inter Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-        .container {
-            background: var(--card-bg);
-            width: 100%;
-            max-width: 500px;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
+<style>
+:root {
+  --bg: radial-gradient(circle at top, #0f172a, #020617);
+  --glass: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.18);
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --primary: #3b82f6;
+}
 
-        h1 {
-            font-size: 24px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--text-main);
-        }
+* { box-sizing: border-box; }
 
-        .input-group {
-            margin-bottom: 30px;
-            position: relative;
-        }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: Inter, system-ui, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  color: var(--text);
+}
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
+/* Wider container */
+.container {
+  width: 100%;
+  max-width: 620px;
+  padding: 40px;
+  border-radius: 28px;
+  background: var(--glass);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 30px 80px rgba(0,0,0,0.6);
+}
 
-        .currency-wrapper {
-            position: relative;
-        }
+h1 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 36px;
+  letter-spacing: -0.02em;
+}
 
-        .currency-symbol {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
+label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: block;
+}
 
-        input[type="number"] {
-            width: 100%;
-            padding: 15px 15px 15px 45px; /* Space for LKR */
-            font-size: 18px;
-            border: 2px solid #e1e4e8;
-            border-radius: 12px;
-            box-sizing: border-box;
-            transition: border-color 0.3s ease;
-            outline: none;
-        }
+.input-group {
+  margin-bottom: 22px;
+}
 
-        input[type="number"]:focus {
-            border-color: var(--primary-color);
-        }
+input, select {
+  width: 100%;
+  padding: 15px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  outline: none;
+}
 
-        /* Allocation Cards */
-        .allocation-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
+input:focus, select:focus {
+  border-color: var(--primary);
+}
 
-        .card {
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 12px;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s;
-        }
+.currency {
+  position: relative;
+}
 
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border-color: transparent;
-        }
+.currency span {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-weight: 600;
+}
 
-        .card-label {
-            display: flex;
-            flex-direction: column;
-        }
+.currency input {
+  padding-left: 50px;
+  font-size: 16px;
+}
 
-        .card-title {
-            font-weight: 600;
-            font-size: 15px;
-        }
+.cards {
+  margin-top: 10px;
+}
 
-        .card-percent {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-            background: #f0f0f0;
-            padding: 2px 8px;
-            border-radius: 10px;
-            width: fit-content;
-        }
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.04);
+  border-left: 5px solid;
+  backdrop-filter: blur(10px);
+}
 
-        .amount {
-            font-weight: 700;
-            font-size: 18px;
-        }
+.card span:first-child {
+  font-weight: 600;
+}
 
-        /* Specific Colors for Categories */
-        .needs .amount { color: var(--primary-color); }
-        .fun .amount { color: var(--accent-orange); }
-        .emergency .amount { color: var(--accent-red); }
-        .goal .amount { color: var(--accent-teal); }
-        .invest .amount { color: var(--accent-purple); }
+.amount {
+  font-size: 17px;
+  font-weight: 700;
+}
 
-        .needs { border-left: 5px solid var(--primary-color); }
-        .fun { border-left: 5px solid var(--accent-orange); }
-        .emergency { border-left: 5px solid var(--accent-red); }
-        .goal { border-left: 5px solid var(--accent-teal); }
-        .invest { border-left: 5px solid var(--accent-purple); }
+/* Accent colors */
+.needs { border-color: #3b82f6; }
+.invest { border-color: #a855f7; }
+.fun { border-color: #f97316; }
+.emergency { border-color: #ef4444; }
+.goal { border-color: #14b8a6; }
 
-        .total-display {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 13px;
-            color: #aaa;
-        }
+.split {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 12px;
+  color: var(--muted);
+}
 
-    </style>
+button {
+  margin-top: 30px;
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  box-shadow: 0 10px 30px rgba(59,130,246,0.35);
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+</style>
 </head>
+
 <body>
 
 <div class="container">
-    <h1>💸 Income Allocator</h1>
+<h1>💸 Income Allocator</h1>
 
-    <div class="input-group">
-        <label for="income">Enter Income Amount (LKR)</label>
-        <div class="currency-wrapper">
-            <span class="currency-symbol">Rs.</span>
-            <input type="number" id="income" placeholder="150,000" oninput="calculateSplit()">
-        </div>
-    </div>
-
-    <div class="allocation-grid">
-        <div class="card needs">
-            <div class="card-label">
-                <span class="card-title">Main (HNB)</span>
-                <span class="card-percent">55% - Needs</span>
-            </div>
-            <span class="amount" id="val-needs">0.00</span>
-        </div>
-
-        <div class="card invest">
-            <div class="card-label">
-                <span class="card-title">Investment</span>
-                <span class="card-percent">15% - Future</span>
-            </div>
-            <span class="amount" id="val-invest">0.00</span>
-        </div>
-
-        <div class="card fun">
-            <div class="card-label">
-                <span class="card-title">Fun</span>
-                <span class="card-percent">10% - Enjoy</span>
-            </div>
-            <span class="amount" id="val-fun">0.00</span>
-        </div>
-
-        <div class="card emergency">
-            <div class="card-label">
-                <span class="card-title">Emergency</span>
-                <span class="card-percent">10% - Safety</span>
-            </div>
-            <span class="amount" id="val-emergency">0.00</span>
-        </div>
-
-        <div class="card goal">
-            <div class="card-label">
-                <span class="card-title">Goal (Bike/Home)</span>
-                <span class="card-percent">10% - Dream</span>
-            </div>
-            <span class="amount" id="val-goal">0.00</span>
-        </div>
-    </div>
-
-    <div class="total-display">
-        Plan: 55 / 15 / 10 / 10 / 10 Split
-    </div>
+<div class="input-group">
+  <label>Date</label>
+  <input type="date" id="date">
 </div>
 
+<div class="input-group">
+  <label>Income Source</label>
+  <select id="source">
+    <option>Upwork</option>
+    <option>Direct Client</option>
+    <option>Local Client</option>
+  </select>
+</div>
+
+<div class="input-group">
+  <label>Income Amount (LKR)</label>
+  <div class="currency">
+    <span>Rs.</span>
+    <input type="number" id="income" placeholder="0.00">
+  </div>
+</div>
+
+<div class="cards">
+  <div class="card needs"><span>Main (HNB)</span><span class="amount" id="needs">0.00</span></div>
+  <div class="card invest"><span>Investment</span><span class="amount" id="invest">0.00</span></div>
+  <div class="card fun"><span>Fun</span><span class="amount" id="fun">0.00</span></div>
+  <div class="card emergency"><span>Emergency</span><span class="amount" id="emergency">0.00</span></div>
+  <div class="card goal"><span>Goal</span><span class="amount" id="goal">0.00</span></div>
+</div>
+
+<div class="split">55 / 15 / 10 / 10 / 10 split</div>
+
+<button onclick="savePDF()">📄 Save as PDF</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script>
-    function formatCurrency(amount) {
-        return amount.toLocaleString('en-LK', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-    }
+date.valueAsDate = new Date();
+income.addEventListener("input", calculate);
 
-    function calculateSplit() {
-        const input = document.getElementById('income').value;
-        const total = parseFloat(input);
+function format(n) {
+  return n.toLocaleString("en-LK", { minimumFractionDigits: 2 });
+}
 
-        if (isNaN(total) || total === 0) {
-            document.getElementById('val-needs').textContent = "0.00";
-            document.getElementById('val-fun').textContent = "0.00";
-            document.getElementById('val-emergency').textContent = "0.00";
-            document.getElementById('val-goal').textContent = "0.00";
-            document.getElementById('val-invest').textContent = "0.00";
-            return;
-        }
+function calculate() {
+  const v = parseFloat(income.value) || 0;
+  needs.innerText = format(v * 0.55);
+  invest.innerText = format(v * 0.15);
+  fun.innerText = format(v * 0.10);
+  emergency.innerText = format(v * 0.10);
+  goal.innerText = format(v * 0.10);
+}
 
-        // Calculations
-        const needs = total * 0.55;
-        const fun = total * 0.10;
-        const emergency = total * 0.10;
-        const goal = total * 0.10;
-        const invest = total * 0.15;
+function savePDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
 
-        // Update DOM
-        document.getElementById('val-needs').textContent = formatCurrency(needs);
-        document.getElementById('val-fun').textContent = formatCurrency(fun);
-        document.getElementById('val-emergency').textContent = formatCurrency(emergency);
-        document.getElementById('val-goal').textContent = formatCurrency(goal);
-        document.getElementById('val-invest').textContent = formatCurrency(invest);
-    }
+  pdf.text("Income Allocation Report", 20, 20);
+  pdf.text(`Date: ${date.value}`, 20, 35);
+  pdf.text(`Source: ${source.value}`, 20, 43);
+  pdf.text(`Income: Rs. ${income.value}`, 20, 51);
+
+  pdf.text(`Needs: ${needs.innerText}`, 20, 65);
+  pdf.text(`Investment: ${invest.innerText}`, 20, 73);
+  pdf.text(`Fun: ${fun.innerText}`, 20, 81);
+  pdf.text(`Emergency: ${emergency.innerText}`, 20, 89);
+  pdf.text(`Goal: ${goal.innerText}`, 20, 97);
+
+  pdf.save(`income-${date.value}.pdf`);
+}
 </script>
 
 </body>
 </html>
-
