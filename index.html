@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Income Allocator</title>
 
+<!-- Inter Font -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -40,9 +41,10 @@ body {
   border-radius: 28px;
   background: var(--glass);
   backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
   border: 1px solid var(--border);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 30px 80px rgba(0,0,0,0.6);
 }
 
 h1 {
@@ -60,7 +62,9 @@ label {
   display: block;
 }
 
-.input-group { margin-bottom: 22px; }
+.input-group {
+  margin-bottom: 22px;
+}
 
 input, select {
   width: 100%;
@@ -72,6 +76,10 @@ input, select {
   background: rgba(255,255,255,0.06);
   color: var(--text);
   outline: none;
+}
+
+input:focus, select:focus {
+  border-color: var(--primary);
 }
 
 .currency {
@@ -92,7 +100,9 @@ input, select {
   font-size: 16px;
 }
 
-.cards { margin-top: 10px; }
+.cards {
+  margin-top: 10px;
+}
 
 .card {
   display: flex;
@@ -114,6 +124,7 @@ input, select {
   font-weight: 700;
 }
 
+/* Accent colors */
 .needs { border-color: #3b82f6; }
 .invest { border-color: #a855f7; }
 .fun { border-color: #f97316; }
@@ -145,60 +156,60 @@ button {
 <body>
 
 <div class="container">
-<h1>💸 Income Allocator</h1>
+  <h1>💸 Income Allocator</h1>
 
-<div class="input-group">
-  <label>Date</label>
-  <input type="date" id="date">
-</div>
-
-<div class="input-group">
-  <label>Income Source</label>
-  <select id="source">
-    <option>Upwork</option>
-    <option>Direct Client</option>
-    <option>Local Client</option>
-  </select>
-</div>
-
-<div class="input-group">
-  <label>Income Amount (LKR)</label>
-  <div class="currency">
-    <span>Rs.</span>
-    <input type="number" id="income" placeholder="0.00">
-  </div>
-</div>
-
-<div class="cards">
-  <div class="card needs">
-    <span>Main (HNB)</span>
-    <span class="amount" id="needs">0.00</span>
+  <div class="input-group">
+    <label>Date</label>
+    <input type="date" id="date">
   </div>
 
-  <div class="card invest">
-    <span>Investment (FRIMI)</span>
-    <span class="amount" id="invest">0.00</span>
+  <div class="input-group">
+    <label>Income Source</label>
+    <select id="source">
+      <option>Upwork</option>
+      <option>Direct Client</option>
+      <option>Local Client</option>
+    </select>
   </div>
 
-  <div class="card fun">
-    <span>Fun (People’s Bank)</span>
-    <span class="amount" id="fun">0.00</span>
+  <div class="input-group">
+    <label>Income Amount (LKR)</label>
+    <div class="currency">
+      <span>Rs.</span>
+      <input type="number" id="income" placeholder="0.00">
+    </div>
   </div>
 
-  <div class="card emergency">
-    <span>Emergency (NSB)</span>
-    <span class="amount" id="emergency">0.00</span>
+  <div class="cards">
+    <div class="card needs">
+      <span>Main Account - Hatton National Bank</span>
+      <span class="amount" id="needs">0.00</span>
+    </div>
+
+    <div class="card invest">
+      <span>Investment Account - FRIMI App</span>
+      <span class="amount" id="invest">0.00</span>
+    </div>
+
+    <div class="card fun">
+      <span>Fun Account - Genie App</span>
+      <span class="amount" id="fun">0.00</span>
+    </div>
+
+    <div class="card emergency">
+      <span>Emergency Account - Nations Trust Bank</span>
+      <span class="amount" id="emergency">0.00</span>
+    </div>
+
+    <div class="card goal">
+      <span>Saving Account - Commercial Bank</span>
+      <span class="amount" id="goal">0.00</span>
+    </div>
   </div>
 
-  <div class="card goal">
-    <span>Goal (HNB 2ND)</span>
-    <span class="amount" id="goal">0.00</span>
-  </div>
-</div>
+  <div class="split">55 / 15 / 10 / 10 / 10 split</div>
 
-<div class="split">55 / 15 / 10 / 10 / 10 split</div>
-
-<button onclick="savePDF()">📄 Save as PDF</button>
+  <button onclick="savePDF()">📄 Save as PDF</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -229,11 +240,11 @@ function savePDF() {
   pdf.text(`Source: ${source.value}`, 20, 43);
   pdf.text(`Income: Rs. ${income.value}`, 20, 51);
 
-  pdf.text(`Main (HNB): ${needs.innerText}`, 20, 65);
-  pdf.text(`Investment (FRIMI): ${invest.innerText}`, 20, 73);
-  pdf.text(`Fun (People’s Bank): ${fun.innerText}`, 20, 81);
-  pdf.text(`Emergency (NSB): ${emergency.innerText}`, 20, 89);
-  pdf.text(`Goal (HNB 2ND): ${goal.innerText}`, 20, 97);
+  pdf.text(`Main Account - Hatton National Bank: ${needs.innerText}`, 20, 65);
+  pdf.text(`Investment Account - FRIMI App: ${invest.innerText}`, 20, 73);
+  pdf.text(`Fun Account - Genie App: ${fun.innerText}`, 20, 81);
+  pdf.text(`Emergency Account - Nations Trust Bank: ${emergency.innerText}`, 20, 89);
+  pdf.text(`Saving Account - Commercial Bank: ${goal.innerText}`, 20, 97);
 
   pdf.save(`income-${date.value}.pdf`);
 }
